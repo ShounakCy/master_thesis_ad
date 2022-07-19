@@ -62,3 +62,46 @@
             traj{k}(:,5) = traj{k}(:,5) - offset(k);
         end
     end
+
+
+    for ii = 1:dataset_to_use
+        tic;
+        disp(['Now process dataset ', num2str(ii)])
+    
+        % Loop on each row.
+        t =traj{ii}(:,1);
+        len = length(traj{ii}(:,1));
+        for k = 1:length(traj{ii}(:,1)) 
+            % Refresh the process every 1 mins
+            if toc > 60  
+                fprintf( 'Dataset-%d: Complete %.3f%% \n', ii, k/length(traj{ii}(:,1))*100 );
+                tic;
+            end
+
+            dsId = ii;
+            vehId = traj{ii}(k,2);
+            time = traj{ii}(k,3);
+            % Get all rows about this vehId
+            vehtraj = traj{ii}(traj{ii}(:,2)==vehId, : );  
+        
+            % Get the row index of traj at this frame.
+
+            ind = find(vehtraj(:,3)==time);  
+            %find(X) returns a vector containing the linear indices of each nonzero element in array X.
+            ind = ind(1);
+            lane = traj{ii}(k,6);
+
+             % Lateral maneuver in Column 7:
+             %So we check for every index the lane number and compare 
+             %with the upper boundary and Lower boundary and fill the 
+             %lateral maneuver column accordingly
+             
+            ub = min(size(vehtraj,1),ind+40);                                %Upper boundary (+40 frame)
+            lb = max(1, ind-40);                                             %Lower boundary (-40 frame)
+            if vehtraj(ub,6)>vehtraj(ind,6) || vehtraj(ind,6)>vehtraj(lb,6)  %(prepate to turn or stablize after turn)
+                traj{ii}(k,7) = 3;   % Turn Right==>3. 
+            elseif vehtraj(ub,6)<vehtraj(ind,6) || vehtraj(ind,6)<vehtraj(lb,6)
+                traj{ii}(k,7) = 2;   % Turn Left==>2.
+            else
+                traj{ii}(k,7) = 1;   % Keep lane==>1.
+            end
