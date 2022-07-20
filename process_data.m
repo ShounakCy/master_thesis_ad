@@ -163,3 +163,22 @@
         fprintf( 'Now merge %d rows of data from traj{%d} \n', size(traj{i},1), i);
     end
     clear traj;
+
+% Training, Validation and Test dataset (training 70%, validation 10%, testing 20%)
+    trajTr = [];
+    trajVal = [];
+    trajTs = [];
+    for k = 1:dataset_to_use 
+
+        % Split dataset_to_use by unique vehicle ids
+        uniqueVehIds = sort( unique(trajAll(trajAll(:,1)==k,2)) );
+        % Cutting point: Vehicle Id with index of 0.7* length(candidate vehicles) (70% Training set)
+        ul1 = uniqueVehIds( round(0.7*length(uniqueVehIds)) ); 
+        % Cutting point: Vehicle Id with index of 0.8* length(candidate vehicles) (20% Test set)
+        ul2 = uniqueVehIds( round(0.8*length(uniqueVehIds)) ); 
+
+        % Extract according to the vehicle ID 
+        trajTr =  [trajTr;  trajAll(trajAll(:,1)==k & trajAll(:,2)<=ul1, :) ]; 
+        trajVal = [trajVal; trajAll(trajAll(:,1)==k & trajAll(:,2)>ul1 & trajAll(:,2)<=ul2, :) ];
+        trajTs =  [trajTs;  trajAll(trajAll(:,1)==k & trajAll(:,2)>ul2, :) ];
+    end
