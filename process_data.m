@@ -131,3 +131,27 @@
              % Only keep the (vehId, localX, localY)     Taking the
              % vehicles at that time
             otherVehsAtTime = traj{ii}( traj{ii}(:,3)==time , [2,4,5]); 
+
+            % Checking the vehicles in range
+            otherVehsInSizeRnage = otherVehsAtTime( abs(otherVehsAtTime(:,3)-centVehY)<(0.5*grid_length*cell_length) ...
+                                                & abs(otherVehsAtTime(:,2)-centVehX)<(0.5*grid_width*cell_width) , :);
+            if ~isempty(otherVehsInSizeRnage)
+                % Lateral and Longitute grid location. Finally exact location is saved in the 3rd column;
+                %ceil(X) rounds each element of X to the nearest integer greater than or equal to that element.
+                otherVehsInSizeRnage(:,2) = ceil((otherVehsInSizeRnage(:,2) - gridMinX) / cell_width); 
+                otherVehsInSizeRnage(:,3) = ceil((otherVehsInSizeRnage(:,3) - gridMinY) / cell_length); 
+                otherVehsInSizeRnage(:,3) = otherVehsInSizeRnage(:,3) + (otherVehsInSizeRnage(:,2)-1) * grid_length; 
+                for l = 1:size(otherVehsInSizeRnage, 1)
+                    exactGridLocation = otherVehsInSizeRnage(l,3);
+                    % ignore if its the ego car itself, no neighbours
+                    if exactGridLocation ~= grid_cent_location 
+                        disp('found neighbour')
+                        %getting the vehicle id into the grid location
+                        traj{ii}(k,13+exactGridLocation) = otherVehsInSizeRnage(l,1);
+                        disp(13+exactGridLocation);
+                    end
+                end   
+            end
+            
+        end
+    end
