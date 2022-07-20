@@ -95,7 +95,7 @@
              %So we check for every index the lane number and compare 
              %with the upper boundary and Lower boundary and fill the 
              %lateral maneuver column accordingly
-             
+
             ub = min(size(vehtraj,1),ind+40);                                %Upper boundary (+40 frame)
             lb = max(1, ind-40);                                             %Lower boundary (-40 frame)
             if vehtraj(ub,6)>vehtraj(ind,6) || vehtraj(ind,6)>vehtraj(lb,6)  %(prepate to turn or stablize after turn)
@@ -104,4 +104,20 @@
                 traj{ii}(k,7) = 2;   % Turn Left==>2.
             else
                 traj{ii}(k,7) = 1;   % Keep lane==>1.
+            end
+
+            % Longitudinal maneuver in Column 8:
+            ub = min(size(vehtraj,1),ind+50); % Future boundary  (+50 frame)
+            lb = max(1, ind-30);              % History boundary (-30 frame)
+            if ub==ind || lb ==ind
+                traj{ii}(k,8) = 1;   % Normal==>1 
+            else 
+            %checking the values in the local_y
+                vHist = (vehtraj(ind,5)-vehtraj(lb,5))/(ind-lb);
+                vFut = (vehtraj(ub,5)-vehtraj(ind,5))/(ub-ind);
+                if vFut/vHist <0.85
+                    traj{ii}(k,8) = 2; % Brake==> 2
+                else
+                    traj{ii}(k,8) = 1; % Normal==>1
+                end
             end

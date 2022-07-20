@@ -1,3 +1,4 @@
 # master_thesis_ad
 
-# Using the converted dataset of HighD to NGSIM format
+# Please download the dataset of HighD from https://www.highd-dataset.com/#download
+
