@@ -173,7 +173,7 @@
         % Split dataset_to_use by unique vehicle ids
         uniqueVehIds = sort( unique(trajAll(trajAll(:,1)==k,2)) );
         % Cutting point: Vehicle Id with index of 0.7* length(candidate vehicles) (70% Training set)
-        ul1 = uniqueVehIds( round(0.7*length(uniqueVehIds)) ); 
+        ul1 = uniqueVehIds( round(0.75*length(uniqueVehIds)) ); 
         % Cutting point: Vehicle Id with index of 0.8* length(candidate vehicles) (20% Test set)
         ul2 = uniqueVehIds( round(0.8*length(uniqueVehIds)) ); 
 
