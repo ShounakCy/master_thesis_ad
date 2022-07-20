@@ -121,3 +121,13 @@
                     traj{ii}(k,8) = 1; % Normal==>1
                 end
             end
+
+             % Get grid locations in Column 14~13+grid_length*grid_width (grid_cells, each with cell_length*cell_width): 
+            centVehX = traj{ii}(k,4);
+            centVehY = traj{ii}(k,5);
+            %Taking the grid size w.r.t vehicle center
+            gridMinX = centVehX - 0.5*grid_width*cell_width;
+            gridMinY = centVehY - 0.5*grid_length*cell_length;
+             % Only keep the (vehId, localX, localY)     Taking the
+             % vehicles at that time
+            otherVehsAtTime = traj{ii}( traj{ii}(:,3)==time , [2,4,5]); 
