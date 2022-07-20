@@ -155,3 +155,11 @@
             
         end
     end
+
+    % Merge all datasets together.
+    trajAll = [];
+    for i = 1:dataset_to_use
+        trajAll = [trajAll; traj{i}];
+        fprintf( 'Now merge %d rows of data from traj{%d} \n', size(traj{i},1), i);
+    end
+    clear traj;
