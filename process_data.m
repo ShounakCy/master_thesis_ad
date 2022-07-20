@@ -170,11 +170,12 @@
     trajTs = [];
     for k = 1:dataset_to_use 
 
-        % Split dataset_to_use by unique vehicle ids
+        % Split dataset by unique vehicle ids
         uniqueVehIds = sort( unique(trajAll(trajAll(:,1)==k,2)) );
         % Cutting point: Vehicle Id with index of 0.7* length(candidate vehicles) (70% Training set)
         ul1 = uniqueVehIds( round(0.75*length(uniqueVehIds)) ); 
         % Cutting point: Vehicle Id with index of 0.8* length(candidate vehicles) (20% Test set)
+        %choose vehicles after 80%
         ul2 = uniqueVehIds( round(0.8*length(uniqueVehIds)) ); 
 
         % Extract according to the vehicle ID 
