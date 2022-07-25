@@ -183,3 +183,19 @@
         trajVal = [trajVal; trajAll(trajAll(:,1)==k & trajAll(:,2)>ul1 & trajAll(:,2)<=ul2, :) ];
         trajTs =  [trajTs;  trajAll(trajAll(:,1)==k & trajAll(:,2)>ul2, :) ];
     end
+
+% Merging all info together in tracks by vehicles Ids
+    % The neighbour existence problem is addressed
+    tracks = {};
+    for k = 1:dataset_to_use
+        %get all the data by dataset
+        trajSet = trajAll(trajAll(:,1)==k,:); 
+        % Unique Vehicle ID
+        carIds = unique(trajSet(:,2));       
+        for l = 1:length(carIds)
+            % The cell in {datasetID, carID} is placed with (11+grid_cells)*TotalFram.
+            %Now each cell of tracks contains all the inforamtion
+            %i.e., all the columns and rows sorted by vehicles
+            tracks{k,carIds(l)} = trajSet( trajSet(:,2)==carIds(l),3:end )';                      
+        end
+    end
