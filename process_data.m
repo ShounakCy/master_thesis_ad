@@ -199,3 +199,47 @@
             tracks{k,carIds(l)} = trajSet( trajSet(:,2)==carIds(l),3:end )';                      
         end
     end
+
+    disp('Filtering edge cases...')
+
+    % Flag for whether to discard this row of dataraw_folder
+    indsTr = zeros(size(trajTr,1),1); 
+    indsVal = zeros(size(trajVal,1),1);
+    indsTs = zeros(size(trajTs,1),1);
+
+    % Since the model uses 3 sec of trajectory history for prediction, 
+    % and 5s future for planning
+        
+    for k = 1: size(trajTr,1)   % Loop on each row of traj.
+        t = trajTr(k,3);    
+        %check if the frames t are more than 30
+        if size(tracks{trajTr(k,1),trajTr(k,2)}, 2) > 30
+            x = tracks{trajTr(k,1),trajTr(k,2)}(1,31);
+            %  this frame t should be larger than the 31st id, and
+            %  has at least t+50 frames for future.
+            if tracks{trajTr(k,1),trajTr(k,2)}(1,31) <= t && tracks{trajTr(k,1),trajTr(k,2)}(1,end)>= t+50
+                indsTr(k) = 1;
+            end
+        end
+    end
+    trajTr = trajTr(indsTr,:);
+
+    for k = 1: size(trajVal,1)
+        t = trajVal(k,3);
+        if size(tracks{trajVal(k,1),trajVal(k,2)}, 2) > 30
+            if tracks{trajVal(k,1),trajVal(k,2)}(1,31) <= t && tracks{trajVal(k,1),trajVal(k,2)}(1,end)>= t+50
+                indsVal(k) = 1;
+            end
+        end
+    end
+    trajVal = trajVal(indsVal,:);
+
+    for k = 1: size(trajTs,1)
+        t = trajTs(k,3);
+        if size(tracks{trajTs(k,1),trajTs(k,2)}, 2) > 30
+            if tracks{trajTs(k,1),trajTs(k,2)}(1,31) <= t && tracks{trajTs(k,1),trajTs(k,2)}(1,end)>= t+50
+                indsTs(k) = 1;
+            end
+        end
+    end
+    trajTs = trajTs(indsTs,:);
