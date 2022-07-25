@@ -243,3 +243,5 @@
         end
     end
     trajTs = trajTs(indsTs,:);
+
+    
