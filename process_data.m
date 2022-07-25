@@ -244,4 +244,11 @@
     end
     trajTs = trajTs(indsTs,:);
 
-    
+    fprintf( '### Train data: \n');
+    traj = nbhCheckerFunc(trajTr, tracks);
+
+    fprintf( '### Validation data: \n');
+    traj = nbhCheckerFunc(trajVal, tracks);
+
+    fprintf( '### Test data: \n');
+    traj = nbhCheckerFunc(trajTs, tracks);
