@@ -184,7 +184,7 @@
         trajTs =  [trajTs;  trajAll(trajAll(:,1)==k & trajAll(:,2)>ul2, :) ];
     end
 
-% Merging all info together in tracks by vehicles Ids
+    % Merging all info together in tracks by vehicles Ids
     % The neighbour existence problem is addressed
     tracks = {};
     for k = 1:dataset_to_use
