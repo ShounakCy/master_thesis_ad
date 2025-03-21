@@ -1,4 +1,4 @@
-# master_thesis_ad
+## Master Thesis - Scania Autonomous Driving unit
 
-# Please download the dataset of HighD from https://www.highd-dataset.com/#download
+### Please download the dataset of HighD from https://www.highd-dataset.com/#download
 
